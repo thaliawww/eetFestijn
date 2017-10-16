@@ -1,57 +1,68 @@
-from collections import Counter
 import json
-from six.moves import urllib
+from collections import Counter
 from datetime import datetime
 
-from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpResponse
-from django.core.urlresolvers import reverse
-from django.contrib import messages
+import dateutil.parser
+import weasyprint
 from django.conf import settings
-from django.forms.models import model_to_dict
+from django.contrib import messages
+from django.core.urlresolvers import reverse
 from django.db.models import Q
+from django.forms.models import model_to_dict
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render
 from django.utils.timezone import localtime
+from six.moves import urllib
 
 from orders.models import Item, Order, ItemOrder, Category, Receipt
 from orders.templatetags.display_euro import euro
-from wiebetaaltwat.models import Participant
-from wiebetaaltwat.views import _create_wbw_session
-
-import weasyprint
-import dateutil.parser
 from orders.utils import DateTimeEncoder
+from wiebetaaltwat.models import Participant, List
+from wiebetaaltwat.views import _create_wbw_session
 
 
 def index(request):
     if request.method == 'POST':
         error = False
-        order = Order()
-        order.paymentmethod = request.POST.get('paymentmethod')
-        if order.paymentmethod in ['participant', 'bystander']:
-            try:
-                wbw_id = request.POST.get('participant', 'none')
-                order.participant = Participant.objects.get(wbw_id=wbw_id)
-                if order.paymentmethod == 'participant':
-                    order.name = order.participant.name
-            except:
-                messages.error(request, "Je hebt niet aangegeven wie betaalt.")
-                error = True
-        if order.paymentmethod in ['outoflist', 'bystander']:
-            try:
-                order.name = request.POST.get('name')
-                if not order.name:
-                    raise ValueError("Name variable not defined.")
-            except:
-                messages.error(request, "Je hebt geen naam opgegeven.")
-                error = True
-        if not error:
-            order.save()
-            item_ids = request.POST.getlist('items[]')
-            for item_id in item_ids:
-                item = Item.objects.get(pk=item_id)
-                ItemOrder.objects.create(item=item, order=order)
-            messages.success(request, "Bestelling succesvol doorgegeven!")
+        if 'reset' in request.POST:
+            List.objects.all().update(active=False)
             return HttpResponseRedirect(reverse('index'))
+        if request.POST.get('list') is not None:
+            list_id = request.POST.get('list')
+            updated = List.objects.filter(wbw_id=list_id).update(active=True)
+            if updated == 1:
+                messages.success(request, "Lijst succesvol geselecteerd!")
+            else:
+                messages.error(request, "Je hebt geen lijst geselecteerd.")
+            return HttpResponseRedirect(reverse('index'))
+        else:
+            order = Order()
+            order.paymentmethod = request.POST.get('paymentmethod')
+            if order.paymentmethod in ['participant', 'bystander']:
+                try:
+                    wbw_id = request.POST.get('participant', 'none')
+                    order.participant = Participant.objects.get(wbw_id=wbw_id)
+                    if order.paymentmethod == 'participant':
+                        order.name = order.participant.name
+                except:
+                    messages.error(request, "Je hebt niet aangegeven wie betaalt.")
+                    error = True
+            if order.paymentmethod in ['outoflist', 'bystander']:
+                try:
+                    order.name = request.POST.get('name')
+                    if not order.name:
+                        raise ValueError("Name variable not defined.")
+                except:
+                    messages.error(request, "Je hebt geen naam opgegeven.")
+                    error = True
+            if not error:
+                order.save()
+                item_ids = request.POST.getlist('items[]')
+                for item_id in item_ids:
+                    item = Item.objects.get(pk=item_id)
+                    ItemOrder.objects.create(item=item, order=order)
+                messages.success(request, "Bestelling succesvol doorgegeven!")
+                return HttpResponseRedirect(reverse('index'))
     categories = Category.objects.all().prefetch_related('items__discounts')
     total = Item.objects.count()
     n = 0
@@ -59,7 +70,14 @@ def index(request):
     for category in categories:
         cols[0 if n < total/2 else 1].append(category)
         n += category.items.count()
-    context = {'cols': cols, 'participants': Participant.objects.all()}
+    context = {'cols': cols, 'order_count': Order.objects.count()}
+
+    if List.objects.filter(active=True).count() == 1:
+        context['active_list'] = True
+        context['participants'] = Participant.objects.filter(list__active=True)
+    else:
+        context['active_list'] = False
+        context['lists'] = List.objects.all()
 
     # add warning for eaters not in the wbw list
     context['warning_externals'] = settings.WARNING_EXTERNALS
@@ -123,6 +141,7 @@ def overview(request):
                 contents = json.dumps(receipt, cls=DateTimeEncoder)
                 Receipt(contents=contents).save()
                 Order.objects.all().delete()
+            List.objects.all().update(active=False)
             messages.success(request, "Alle bestellingen verwerkt!")
         elif 'remove' in request.POST:
             order = Order.objects.get(pk=request.POST['remove'])
@@ -169,7 +188,7 @@ def overview(request):
                             }
                         ]}}
                     url = ('https://api.wiebetaaltwat.nl/api/lists/{}/expenses'
-                           .format(settings.WBW_LIST_ID))
+                           .format(List.objects.get(active=True).wbw_id))
                     response = session.post(url,
                                             json=payload,
                                             headers={'Accept-Version': '1'},

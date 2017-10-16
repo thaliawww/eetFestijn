@@ -1,14 +1,16 @@
 var menuJS = {
 
     init:function() {
-        $('#submitbtn').prop('disabled', true);
-        $("table#menu tr.item").on('click', function (e) {
-            menuJS.add($(this));
-        });
-        $("table#menu tr.randomitem").on('click', function (e) {
-            var siblings = $(this).siblings();
-            siblings[Math.floor(Math.random() * siblings.length)].click();
-        });
+        if ($('body').attr('data-active') === 'true') {
+            $('#submitbtn').prop('disabled', true);
+            $("table#menu tr.item").on('click', function (e) {
+                menuJS.add($(this));
+            });
+            $("table#menu tr.randomitem").on('click', function (e) {
+                var siblings = $(this).siblings();
+                siblings[Math.floor(Math.random() * siblings.length)].click();
+            });
+        }
     },
 
     add:function(item_tr) {

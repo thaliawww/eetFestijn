@@ -1,5 +1,14 @@
 from django.contrib import admin
 
-from .models import Participant
+from .models import Participant, List
 
-admin.site.register(Participant)
+
+class ParticipantInline(admin.TabularInline):
+    model = Participant
+    extra = 0
+
+
+class ListAdmin(admin.ModelAdmin):
+    inlines = (ParticipantInline, )
+
+admin.site.register(List, ListAdmin)
