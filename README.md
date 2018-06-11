@@ -1,4 +1,4 @@
-# eetFestijn [![Build Status](https://travis-ci.org/joostrijneveld/eetFestijn.svg?branch=master)](https://travis-ci.org/joostrijneveld/eetFestijn) [![Coverage Status](https://coveralls.io/repos/joostrijneveld/eetFestijn/badge.svg)](https://coveralls.io/r/joostrijneveld/eetFestijn)
+# eetFestijn [![Build Status](https://travis-ci.org/thaliawww/eetFestijn.svg?branch=master)](https://travis-ci.org/thaliawww/eetFestijn) [![Coverage Status](https://coveralls.io/repos/thaliawww/eetFestijn/badge.svg)](https://coveralls.io/r/thaliawww/eetFestijn)
 
 ![screenshot of eetFestijn](doc/screenshot.png)
 
