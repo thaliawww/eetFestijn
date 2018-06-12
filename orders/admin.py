@@ -15,6 +15,7 @@ class OrderAdmin(admin.ModelAdmin):
     inlines = (ItemOrderInline, )
     list_display = ('name', 'itemstring', 'total')
 
+
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Discount)

@@ -1,8 +1,9 @@
-from django.conf.urls import include, url
+from django.conf.urls import include
 from django.contrib import admin
+from django.urls import path
 
 urlpatterns = [
-    url(r'^(?i)admin/', include(admin.site.urls)),
-    url(r'^(?i)wiebetaaltwat/', include('wiebetaaltwat.urls')),
-    url(r'^(?i)', include('orders.urls')),
+    path('admin/', admin.site.urls),
+    path('wiebetaaltwat/', include('wiebetaaltwat.urls')),
+    path('', include('orders.urls')),
 ]

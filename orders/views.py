@@ -1,11 +1,12 @@
 from collections import Counter
 import json
+from django.core.exceptions import ValidationError
+from django.urls import reverse
 from six.moves import urllib
 from datetime import datetime
 
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
-from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.conf import settings
 from django.forms.models import model_to_dict
@@ -33,7 +34,7 @@ def index(request):
                 order.participant = Participant.objects.get(wbw_id=wbw_id)
                 if order.paymentmethod == 'participant':
                     order.name = order.participant.name
-            except:
+            except ValidationError:
                 messages.error(request, "Je hebt niet aangegeven wie betaalt.")
                 error = True
         if order.paymentmethod in ['outoflist', 'bystander']:
@@ -41,7 +42,7 @@ def index(request):
                 order.name = request.POST.get('name')
                 if not order.name:
                     raise ValueError("Name variable not defined.")
-            except:
+            except ValueError:
                 messages.error(request, "Je hebt geen naam opgegeven.")
                 error = True
         if not error:
@@ -175,7 +176,7 @@ def overview(request):
                                             headers={'Accept-Version': '3'},
                                             cookies=response.cookies)
                     order.save()
-            except:
+            except:  # noqa
                 # This cannot happen accidentally
                 HttpResponseRedirect(reverse('overview'))
         return HttpResponseRedirect(reverse('overview'))

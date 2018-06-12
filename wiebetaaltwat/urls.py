@@ -1,6 +1,7 @@
-from django.conf.urls import url
+from django.urls import path
+
 from . import views
 
 urlpatterns = [
-    url(r'^update-list/$', views.update_lists, name='update_list'),
+    path('update-list/', views.update_lists, name='update_list'),
 ]

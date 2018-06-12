@@ -36,7 +36,8 @@ class Item(models.Model):
 
 class Order(models.Model):
     name = models.CharField(max_length=200)
-    participant = models.ForeignKey(Participant, blank=True, null=True)
+    participant = models.ForeignKey(Participant, blank=True, null=True,
+                                    on_delete=models.SET_NULL)
     paymentmethod = models.CharField(max_length=11,
                                      choices=(('participant', 'Participant'),
                                               ('bystander', 'Bystander'),
@@ -64,8 +65,8 @@ class Order(models.Model):
 
 
 class ItemOrder(models.Model):
-    item = models.ForeignKey(Item)
-    order = models.ForeignKey(Order)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.item)
