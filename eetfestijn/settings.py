@@ -25,6 +25,9 @@ ALLOWED_HOSTS = []
 if 'DJANGO_HOSTS' in os.environ:
     ALLOWED_HOSTS = os.environ.get('DJANGO_HOSTS').split(',')
 
+WBW_UID = os.environ.get('DJANGO_WBW_UID')
+WBW_EMAIL = os.environ.get('DJANGO_WBW_EMAIL')
+WBW_PASSWORD = os.environ.get('DJANGO_WBW_PASSWORD')
 
 # Application definition
 
