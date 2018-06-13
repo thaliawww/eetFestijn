@@ -22,7 +22,7 @@ RUN mkdir /eetfestijn && \
     mkdir -p /eetfestijn/log/ && \
     touch /eetfestijn/log/uwsgi.log && \
     chown -R www-data:www-data /eetfestijn && \
-    mkdir -p /usr/src/app/
+    mkdir -p /usr/src/app/ 
 
 WORKDIR /usr/src/app/
 COPY . /usr/src/app/
