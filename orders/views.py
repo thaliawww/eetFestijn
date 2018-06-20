@@ -11,6 +11,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.forms.models import model_to_dict
 from django.db.models import Q
+from django.urls import reverse
 from django.utils.timezone import localtime
 
 from orders.models import Item, Order, ItemOrder, Category, Receipt
@@ -185,5 +186,6 @@ def overview(request):
     context = {'orders': orders, 'grandtotal': Order.grandtotal(),
                'slack': hasattr(settings, 'SLACK'),
                'unpaid': wbw_orders.count() > 0,
-               'participants': Participant.objects.all()}
+               'participants': Participant.objects.all(),
+               'print_url': request.build_absolute_uri(reverse('print_script'))}
     return render(request, 'orders/overview.html', context)
