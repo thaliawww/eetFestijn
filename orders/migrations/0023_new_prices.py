@@ -3,22 +3,22 @@ from __future__ import unicode_literals
 
 from django.db import models, migrations
 
-def set_price(name, price):
-    Item = apps.get_model("orders", "Item")
-    item = Item.objects.get(name=name)
-    item.price = price
-    item.save()
 
 def new_prices(apps, schema_editor):
     """New prices as of 2018-06-19"""
     Item = apps.get_model("orders", "Item")
     Category = apps.get_model("orders", "Category")
 
-    set_price("Campagnola (nr. 23)", 900)
+    def set_price(name, price):
+        item = Item.objects.get(name=name)
+        item.price = price
+        item.save()
+
+    set_price("Pizza Campagnola (nr. 23)", 900)
     set_price("Pizza Roma (nr. 24)", 750)
     set_price("Pizza Carbonara (nr. 25)", 850)
     set_price("Pizza Funghi e pesce (nr. 26)", 900)
-    set_price("Pizza Mafiosa (nr. 27) ", 900)
+    set_price("Pizza Mafiosa (nr. 27)", 900)
     set_price("Friet zonder", 170)
     set_price("Friet mayonaise (groot)", 250)
     set_price("Friet super (klein)", 400)
@@ -96,8 +96,8 @@ def new_prices(apps, schema_editor):
     kapsalons = Category.objects.get(name="Kapsalons")
     for kapsalon in kapsalons.items.all():
         if "klein" in kapsalon.name:
-            kapsalon.items.add(Items.objects.create(name=kapsalon.name, price=450))
-            kapsalon.name = kapsalon.name.replace("klein", "midden")
+            kapsalons.items.add(Item.objects.create(name=kapsalon.name, price=450))
+            kapsalon.name = kapsalon.name.replace("klein", "middel")
             kapsalon.save()
 
     set_price("Lahmacun met döner", 550)
