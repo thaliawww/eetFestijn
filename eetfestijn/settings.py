@@ -28,6 +28,7 @@ if 'DJANGO_HOSTS' in os.environ:
 WBW_UID = os.environ.get('DJANGO_WBW_UID')
 WBW_EMAIL = os.environ.get('DJANGO_WBW_EMAIL')
 WBW_PASSWORD = os.environ.get('DJANGO_WBW_PASSWORD')
+WBW_LIST_ID = os.environ.get('DJANGO_WBW_LIST_ID')
 
 # Application definition
 
