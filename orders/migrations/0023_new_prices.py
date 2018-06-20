@@ -100,6 +100,10 @@ def new_prices(apps, schema_editor):
             kapsalon.name = kapsalon.name.replace("klein", "middel")
             kapsalon.save()
 
+    kapsalons.items.add(Item.objects.create(name="Kapsalon hete kip (klein)", price=450))
+    kapsalons.items.add(Item.objects.create(name="Kapsalon hete kip (middel)", price=650))
+    kapsalons.items.add(Item.objects.create(name="Kapsalon hete kip (groot)", price=850))
+
     set_price("Lahmacun met döner", 550)
     set_price("Lahmacun met shoarma", 550)
     set_price("Lahmacun met kipdöner", 550)
