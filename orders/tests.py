@@ -10,7 +10,7 @@ class ItemTestCase(TestCase):
         knakworst = Item.objects.get(name="Knakworst")
         friet = Item.objects.get(name="Friet oorlog (klein)")
         aardappel = Item.objects.get(name="extra ras/aardappel")
-        self.assertEqual(knakworst.real_price(), 210)
+        self.assertEqual(knakworst.real_price(), 220)
         self.assertEqual(friet.real_price(), 240)
         self.assertEqual(aardappel.real_price(), 25)
 
@@ -33,7 +33,7 @@ class OrderTestCase(TestCase):
         ItemOrder.objects.create(item=self.items[0], order=order)
         ItemOrder.objects.create(item=self.items[0], order=order)
         order.save()
-        self.assertEqual(order.total(), 420)
+        self.assertEqual(order.total(), 440)
         self.assertEqual(len(order.items.all()), 2)
 
     def test_total(self):
@@ -41,7 +41,7 @@ class OrderTestCase(TestCase):
         for item in self.items:
             ItemOrder.objects.create(item=item, order=order)
         order.save()
-        self.assertEqual(order.total(), 475)
+        self.assertEqual(order.total(), 485)
 
     def test_grandtotal(self):
         order1 = Order.objects.get(name="Test Order 1")
@@ -51,7 +51,7 @@ class OrderTestCase(TestCase):
             ItemOrder.objects.create(item=item, order=order2)
         order1.save()
         order2.save()
-        self.assertEqual(Order.grandtotal(), 950)
+        self.assertEqual(Order.grandtotal(), 970)
 
     def test_name(self):
         self.assertIn("Test Order 1",
@@ -128,7 +128,7 @@ class DiscountTestCase(TestCase):
 
 class FestPopulateTestCase(TestCase):
     def test_totalnumber(self):
-        self.assertEqual(190-2+1+20+2, Item.objects.count())
+        self.assertEqual(190-2+1+20+2+20, Item.objects.count())
         self.assertEqual(3, Discount.objects.count())
 
 
