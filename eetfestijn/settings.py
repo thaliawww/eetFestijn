@@ -16,13 +16,19 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'OVERRIDE_ME'
+SECRET_KEY = os.environ.get('DJANGO_SECRET', 'OVERRIDE_ME')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = []
+if 'DJANGO_HOSTS' in os.environ:
+    ALLOWED_HOSTS = os.environ.get('DJANGO_HOSTS').split(',')
 
+WBW_UID = os.environ.get('DJANGO_WBW_UID')
+WBW_EMAIL = os.environ.get('DJANGO_WBW_EMAIL')
+WBW_PASSWORD = os.environ.get('DJANGO_WBW_PASSWORD')
+WBW_LIST_ID = os.environ.get('DJANGO_WBW_LIST_ID')
 
 # Application definition
 
@@ -38,12 +44,11 @@ INSTALLED_APPS = [
     'wiebetaaltwat',
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -54,7 +59,7 @@ ROOT_URLCONF = 'eetfestijn.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,7 +81,7 @@ WSGI_APPLICATION = 'eetfestijn.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'db', 'db.sqlite3'),
     }
 }
 
@@ -98,6 +103,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = '/eetfestijn/static'
 
 WARNING_EXTERNALS = False
 

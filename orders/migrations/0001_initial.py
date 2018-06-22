@@ -39,7 +39,7 @@ class Migration(migrations.Migration):
             name='ItemOrder',
             fields=[
                 ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
-                ('item', models.ForeignKey(to='orders.Item')),
+                ('item', models.ForeignKey(to='orders.Item', on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -60,7 +60,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='itemorder',
             name='order',
-            field=models.ForeignKey(to='orders.Order'),
+            field=models.ForeignKey(to='orders.Order', on_delete=models.CASCADE),
             preserve_default=True,
         ),
     ]

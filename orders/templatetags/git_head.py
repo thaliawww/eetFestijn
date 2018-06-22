@@ -7,7 +7,7 @@ try:
     head = subprocess.Popen("git rev-parse --short HEAD", shell=True,
                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     HEAD = head.stdout.readline().strip()
-except:
+except:  # noqa
     HEAD = 'unknown'
 
 register = template.Library()
