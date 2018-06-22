@@ -22,3 +22,5 @@ script:
 
 after_success:
   - coveralls
+
+cache: pip
