@@ -6,7 +6,7 @@ import subprocess
 try:
     head = subprocess.Popen("git rev-parse --short HEAD", shell=True,
                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    HEAD = head.stdout.readline().strip()
+    HEAD = head.stdout.readline().strip().decode()
 except:  # noqa
     HEAD = 'unknown'
 
