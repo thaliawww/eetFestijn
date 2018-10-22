@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>eetFestijn - overzicht</title>
+    <title>eetFestijn - overview</title>
     {% load bootstrap3 %}
     {% load display_euro %}
     {% load static %}
@@ -18,45 +18,44 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-4 col-sm-offset-4 main">
-                <h2>Bestellingen ({{ grandtotal | euro }})</h2>
+                <h2>Orders ({{ grandtotal | euro }})</h2>
                 <form role='form' method='post' style='margin-bottom:25px;'>
                     {% csrf_token %}
                     <p>
-
-                        Hieronder staan de bestellingen zoals ze nu zijn. Als je weer helemaal opnieuw
-                        wilt beginnen met een lege lijst bestellingen, klik dan op
+                        Below are the current orders. Do you want to start over with an empty
+                        order list then click
                         <button type="submit" name="process" value="all"
                                 class="btn btn-success btn-xs"
-                                onclick="return confirm('Weet je zeker dat je de bestellingen wilt verwerken?')">
-                                alles verwerken {% bootstrap_icon 'tag' %}
+                                onclick="return confirm('Are you sure you want to process all orders?')">
+                                process all orders {% bootstrap_icon 'tag' %}
                         </button>
-                        om de lijst leeg te maken en een bonnetje te genereren.
+                        to clear the list and generate a receipt.
                         {% if slack %}
-                            Je kunt de huidige bestellingen ook delen via
+                            You can also share the current orders using
                             <button type="submit" name="slack" value="post" class="btn btn-success btn-xs"
-                                    onclick="return confirm('Weet je zeker dat je de bestellingen via Slack wilt delen?')">
+                                    onclick="return confirm('Are you sure you want to share the orders in Slack?')">
                                     <i class="fa fa-slack"></i>
                                     Slack
                             </button>
                         {% endif %}
-                        Zie ook het
+                        If you want you can make a
                         <a class="btn btn-default btn-xs" role="button" href="{% url 'summary' %}">
                             {% bootstrap_icon 'print' %}
-                            printvriendelijke overzicht
+                            printable overview
                         </a>.
                     </p>
                     <p>
-                        Tip! Stuur de bestellingen door naar alle Péageprinters met deze handige bash-oneliner:<br>
+                        Tip! Send the orders to Péage printers using this bash-oneliner:<br>
                         <span style='font-size:12px;font-family:Menlo,Monaco,Consolas,"Courier New",monospace;'>{% include 'orders/printscript.html' %}</span>
                     </p>
                     <p>
-                        Als je graag op het randje leeft kan dat ook met:<br>
+                        If you like living on the edge you can also use:<br>
                         <span style='font-size:12px;font-family:Menlo,Monaco,Consolas,"Courier New",monospace;'>curl {{ print_url }} | sh</span>
                     </p>
                 </form>
                 {% bootstrap_messages %}
                 {% if unpaid %}
-                    <p><strong>Let op!</strong> Er zijn nog bestellingen die via wiebetaaltwat kunnen worden verwerkt. Wie heeft hiervoor betaald?</p>
+                    <p><strong>Caution!</strong> There are orders that still have to be processed in WieBetaaltWat. Who paid for them?</p>
                     <form role='form' method='post'>
                         {% csrf_token %}
                         <div class="form-group">
@@ -72,8 +71,8 @@
                                 <div class='col-sm-3'>
                                     <button type="submit" name="pay"
                                             class="btn btn-warning"
-                                            onclick="return confirm('Weet je zeker dat je alle wiebetaaltwat-betalingen als betaald wil markeren?')">
-                                             {% bootstrap_icon 'euro' %} Alles betalen
+                                            onclick="return confirm('Are you sure you want to mark all WieBetaaltWat orders as paid?')">
+                                             {% bootstrap_icon 'euro' %} Mark all as paid
                                     </button>
                                 </div>
                             </div>
@@ -95,16 +94,16 @@
                         <tr><td>{{ item.name }}</td><td>{{ item | real_price_at:order.date | euro }}</td><td></td></tr>
                         {% endfor %}
                         <tr>
-                            <td colspan='3'>Betaalmethode:
+                            <td colspan='3'>Payment method:
                                 {% if order.paid %}<s>{% endif %}
                                 {% if order.paymentmethod == 'participant' %}
-                                    <strong>Zelf</strong> via Wiebetaaltwat
+                                    <strong>Oneself</strong> via Wiebetaaltwat
                                 {% elif order.paymentmethod == 'bystander' %}
-                                    Via Wiebetaaltwat, via <strong>{{ order.participant.name }}</strong>
+                                    Using Wiebetaaltwat, via <strong>{{ order.participant.name }}</strong>
                                 {% else %}
-                                    <strong>Buiten de lijst om</strong>
+                                    <strong>Outside the list</strong>
                                 {% endif %}
-                                {% if order.paid %}</s> <em>Betaald!</em>{% endif %}
+                                {% if order.paid %}</s> <em>Paid!</em>{% endif %}
                             </td>
                         </tr>
                     </table>
@@ -114,7 +113,7 @@
         </div>
         <div class="row">
            <div class="col-sm-4 col-sm-offset-4">
-               <a href="{% url 'index' %}" role="button" class="btn btn-default btn-block"><span class="glyphicon glyphicon-chevron-left"></span>Ga terug naar de hoofdpagina</a>
+               <a href="{% url 'index' %}" role="button" class="btn btn-default btn-block"><span class="glyphicon glyphicon-chevron-left"></span>Back to the order page</a>
             </div>
         </div>
     </div>

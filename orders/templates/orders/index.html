@@ -16,22 +16,22 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-4 sidebar">
-                <h2>Bestelling</h2>
+                <h2>Order</h2>
                 <form role="form" method="post">
                     {% csrf_token %}
                     {% bootstrap_messages %}
-                    <p>Hoe wil je betalen?</p>
+                    <p>How do you want to pay?</p>
                     <ul class="nav nav-pills wbw-preference">
-                        <li class="active"><a class='paymentmethod' data-method='participant' data-toggle="pill" href="#" data-target="#participate-tab, #no-name-tab">- Ik sta op de wiebetaaltwat-lijst</a></li>
-                        <li><a class='paymentmethod' data-method='bystander' data-toggle="pill" href="#" data-target="#participate-tab, #name-tab">- Ik betaal aan iemand die op de lijst staat</a></li>
-                        <li><a class='paymentmethod' data-method='outoflist' data-toggle="pill" href="#" data-target="#no-participate-tab, #name-tab">- We regelen het buiten de lijst om</a></li>
+                        <li class="active"><a class='paymentmethod' data-method='participant' data-toggle="pill" href="#" data-target="#participate-tab, #no-name-tab">- I'm on the wiebetaaltwat-list</a></li>
+                        <li><a class='paymentmethod' data-method='bystander' data-toggle="pill" href="#" data-target="#participate-tab, #name-tab">- I'm paying someone who is on the list</a></li>
+                        <li><a class='paymentmethod' data-method='outoflist' data-toggle="pill" href="#" data-target="#no-participate-tab, #name-tab">- We're not using the list</a></li>
                     </ul>
                     <input type='hidden' name='paymentmethod' value='participant' />
                     <hr>
                     <div class="tab-content">
                         <div id="name-tab" class="tab-pane">
                             <div class="form-group">
-                                <label class="control-label" for="id_name">Naam</label>
+                                <label class="control-label" for="id_name">Name</label>
                                 <input class="form-control" id="id_name" maxlength="200" name="name" placeholder="Naam" title="" type="text"/>
                             </div>
                         </div>
@@ -40,7 +40,7 @@
                     <div class="tab-content">
                         <div id="participate-tab" class="tab-pane active">
                             <div class="form-group">
-                                <label class="control-label" for="id_participant">Lijst-deelnemer</label>
+                                <label class="control-label" for="id_participant">List-participant</label>
                                 <select class="form-control" id="id_participant" name="participant">
                                     <option value="none" selected="selected">---------</option>
                                     {% for participant in participants %}
@@ -55,14 +55,13 @@
                     <div class="tab-content">
                         <div id="name-tab" class="tab-pane">
                             <div class="alert alert-warning">
-                                <strong>Let op!</strong>
-                                Als externe ben je van harte welkom om mee te eten, maar wij zijn geen thuisbezorgd.nl.
-                                De regel is dan ook: <br /><br />
-                                <strong>mee-eten = meefietsen</strong>
+                                <strong>Please note!</strong>
+                                As non-Technicie member you're welcome to join, but we're not takeaway.com.
+                                The rules are easy: <br /><br />
+                                <strong>joining dinner = joining the pickup team</strong>
 
                                 <br /><br />
-                                Als jij degene bent die voor de externe betaalt, zorg er dan voor dat hij of zij
-                                meefietst.
+                                If you're the one ordering for a non-member then make sure that they will join the pickup team.
                             </div>
                         </div>
                         <div id="no-name-tab" class="tab-pane"></div>
@@ -70,18 +69,18 @@
                     {% endif %}
                     <hr>
                     <div class="form-group">
-                        <label class="control-label">Voedsels</label>
+                        <label class="control-label">Foods</label>
                         <table class="table table-striped" id='ordertable'>
-                            <tr><th style='width:70%'>Naam</th><th style='width:20%'>Prijs</th><th></th></tr>
-                            <tr id='nofood'><td colspan='3'>Nog geen voedsels geselecteerd</td></tr>
-                            <tr id='total' data-total='0'><th>Totaal: </th><td>{{ 0 | euro }}</td><td></td></tr>
+                            <tr><th style='width:70%'>Name</th><th style='width:20%'>Prices</th><th></th></tr>
+                            <tr id='nofood'><td colspan='3'>You have not selected any foods.</td></tr>
+                            <tr id='total' data-total='0'><th>Total: </th><td>{{ 0 | euro }}</td><td></td></tr>
                         </table>
                     </div>
-                    <button type='submit' class='btn btn-primary' id='submitbtn'>Geef bestelling door</button>
-                    <a class='btn btn-default' href="{% url 'summary' %}" data-toggle="tooltip" data-placement="top" title="Printvriendelijk overzicht">{% bootstrap_icon "print" %}</a>
-                    <a class='btn btn-default' href="{% url 'summary_PDF' %}" data-toggle="tooltip" data-placement="top" title="Overzicht als PDF-document">{% bootstrap_icon "save" %}</a>
-                    <a class='btn btn-default' href="{% url 'overview' %}" data-toggle="tooltip" data-placement="top" title="Uitgebreid overzicht">{% bootstrap_icon "list" %}</a>
-                    <a class='btn btn-default' href="{% url 'receipts' %}" data-toggle="tooltip" data-placement="top" title="Bonnetjes">{% bootstrap_icon "tags" %}</a>
+                    <button type='submit' class='btn btn-primary' id='submitbtn'>Order</button>
+                    <a class='btn btn-default' href="{% url 'summary' %}" data-toggle="tooltip" data-placement="top" title="Printable summary">{% bootstrap_icon "print" %}</a>
+                    <a class='btn btn-default' href="{% url 'summary_PDF' %}" data-toggle="tooltip" data-placement="top" title="PDF summary">{% bootstrap_icon "save" %}</a>
+                    <a class='btn btn-default' href="{% url 'overview' %}" data-toggle="tooltip" data-placement="top" title="Advanced overview">{% bootstrap_icon "list" %}</a>
+                    <a class='btn btn-default' href="{% url 'receipts' %}" data-toggle="tooltip" data-placement="top" title="Receipts">{% bootstrap_icon "tags" %}</a>
                 </form>
             </div>
             <div class="col-sm-4 footer">
@@ -124,7 +123,7 @@
                     {% endfor %}
                 </div>
             {% else %}
-                <p>Geen menu beschikbaar.</p>
+                <p>No menu available.</p>
             {% endif %}
             </div>
         </div>

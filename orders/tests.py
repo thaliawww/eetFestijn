@@ -167,7 +167,7 @@ class ViewTestCase(TestCase):
 
     def test_overview(self):
         resp = self.c.get('/overview/')
-        self.assertContains(resp, 'Bestellingen')
+        self.assertContains(resp, 'Orders')
 
     def test_process_and_receipt(self):
         data = {'paymentmethod': 'outoflist', 'name': 'process',
@@ -175,11 +175,11 @@ class ViewTestCase(TestCase):
         self.c.post('/', data)
         resp = self.c.post('/overview/', {'process': 'what'},
                            follow=True)
-        self.assertContains(resp, 'Alle bestellingen verwerkt!')
+        self.assertContains(resp, 'All orders were processed!')
         resp = self.c.get('/receipts/')
         self.assertContains(resp, 'Friet oorlog (klein)')
 
     def test_noname(self):
         data = {'paymentmethod': 'outoflist', 'items[]': str(self.knakid)}
         resp = self.c.post('/', data)
-        self.assertContains(resp, 'Je hebt geen naam opgegeven')
+        self.assertContains(resp, 'Please tell us your name.')

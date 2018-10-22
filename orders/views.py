@@ -36,7 +36,8 @@ def index(request):
                 if order.paymentmethod == 'participant':
                     order.name = order.participant.name
             except ValidationError:
-                messages.error(request, "Je hebt niet aangegeven wie betaalt.")
+                messages.error(request,
+                               "Please tell us who is paying for you.")
                 error = True
         if order.paymentmethod in ['outoflist', 'bystander']:
             try:
@@ -44,7 +45,7 @@ def index(request):
                 if not order.name:
                     raise ValueError("Name variable not defined.")
             except ValueError:
-                messages.error(request, "Je hebt geen naam opgegeven.")
+                messages.error(request, "Please tell us your name.")
                 error = True
         if not error:
             order.save()
@@ -52,7 +53,7 @@ def index(request):
             for item_id in item_ids:
                 item = Item.objects.get(pk=item_id)
                 ItemOrder.objects.create(item=item, order=order)
-            messages.success(request, "Bestelling succesvol doorgegeven!")
+            messages.success(request, "Order successful!")
             return HttpResponseRedirect(reverse('index'))
     categories = Category.objects.all().prefetch_related('items__discounts')
     total = Item.objects.count()
@@ -125,14 +126,14 @@ def overview(request):
                 contents = json.dumps(receipt, cls=DateTimeEncoder)
                 Receipt(contents=contents).save()
                 Order.objects.all().delete()
-            messages.success(request, "Alle bestellingen verwerkt!")
+            messages.success(request, "All orders were processed!")
         elif 'remove' in request.POST:
             order = Order.objects.get(pk=request.POST['remove'])
-            msg = "Bestelling van {.name} verwijderd!".format(order)
+            msg = "{.name}'s order was removed!".format(order)
             order.delete()
             messages.success(request, msg)
         elif 'slack' in request.POST and hasattr(settings, 'SLACK'):
-            jsondata = {'text': 'Nieuwe bestelling!',
+            jsondata = {'text': 'New order!',
                         'channel': settings.SLACK['channel'],
                         'username': settings.SLACK['username'],
                         'icon_emoji': settings.SLACK['icon_emoji']}
@@ -147,7 +148,7 @@ def overview(request):
             data = urllib.parse.urlencode(payload).encode('UTF-8')
             req = urllib.request.Request(settings.SLACK['webhook'], data)
             urllib.request.urlopen(req)
-            messages.success(request, "Bestellingen gedeeld via Slack!")
+            messages.success(request, "The orders have been shared in Slack!")
         elif 'pay' in request.POST:
             try:
                 wbw_id = request.POST.get('participant')
