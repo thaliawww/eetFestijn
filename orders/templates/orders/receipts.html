@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>eetFestijn - bonnetjes</title>
+    <title>eetFestijn - receipts</title>
     {% load bootstrap3 %}
     {% bootstrap_css %}
     {% load display_euro %}
@@ -16,7 +16,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-4 col-sm-offset-4 main">
-                <h2>Bonnetjes</h2>
+                <h2>Receipts</h2>
                 {% if receipts %}
                 <select class="form-control" id='receipts'>
                     {% for receipt in receipts %}
@@ -26,16 +26,16 @@
                             {% else %}
                                 {{ receipt.date | date:'l, Y-m-d' }}
                             {% endif %}
-                            ({{ receipt.dict.orders | length }} perso{{ receipt.dict.orders | pluralize:"on,nen" }},
+                            ({{ receipt.dict.orders | length }} perso{{ receipt.dict.orders | pluralize:"n,ns" }},
                             {{ receipt.dict.grandtotal | euro }})
                         </option>
                     {% endfor %}
                 </select>
                 {% for receipt in receipts %}
                 <div id='receipt{{ receipt.pk }}' class='receipt'>
-                    <h5>verwerkt op {{ receipt.date | date:'l, Y-m-d' }}</h5>
+                    <h5>processed on {{ receipt.date | date:'l, Y-m-d' }}</h5>
                     {% if receipt.latest %}
-                        <h5>laatste bestelling op {{ receipt.latest | date:'l, Y-m-d' }}</h5>
+                        <h5>last order on {{ receipt.latest | date:'l, Y-m-d' }}</h5>
                     {% endif %}
                     <table class="table">
                     {% for order in receipt.dict.orders %}
@@ -51,18 +51,18 @@
                             <tr><td>{{ item.name }}</td><td>{{ item.price | euro }}</td></tr>
                         {% endfor %}
                         {% if order.paymentmethod != 'outoflist' and order.paid %}
-                            <tr><td class='total'>Betaald door:</td><td>{{ order.participant }}</td></tr>
+                            <tr><td class='total'>Paid by:</td><td>{{ order.participant }}</td></tr>
                         {% endif %}
-                        <tr><td class='total'>subtotaal:</td><td>{{ order.total | euro }}</td></tr>
+                        <tr><td class='total'>Subtotal:</td><td>{{ order.total | euro }}</td></tr>
                     {% endfor %}
                     <tfoot>
-                        <tr><th class='total'>totaal:</th><td>{{ receipt.dict.grandtotal | euro }}</td></tr>
+                        <tr><th class='total'>Grand Total:</th><td>{{ receipt.dict.grandtotal | euro }}</td></tr>
                     </tfoot>
                     </table>
                 </div>
                 {% endfor %}
                 {% else %}
-                <p>Er zijn nog geen bestellingen gedaan waar bonnetjes van zijn bewaard.</p>
+                <p>There have not been any orders with saved receipts yet.</p>
                 {% endif %}
             </div>
         </div>
@@ -70,7 +70,7 @@
            <div class="col-sm-4 col-sm-offset-4">
                <a href="{% url 'index' %}" role="button" class="btn btn-default btn-block">
                    {% bootstrap_icon 'chevron-left' %}
-                   Ga terug naar de hoofdpagina
+                   Back to the order page
                </a>
             </div>
         </div>
