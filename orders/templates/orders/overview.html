@@ -97,7 +97,7 @@
                             <td colspan='3'>Payment method:
                                 {% if order.paid %}<s>{% endif %}
                                 {% if order.paymentmethod == 'participant' %}
-                                    <strong>Oneself</strong> via Wiebetaaltwat
+                                    <strong>Themselves</strong> via Wiebetaaltwat
                                 {% elif order.paymentmethod == 'bystander' %}
                                     Using Wiebetaaltwat, via <strong>{{ order.participant.name }}</strong>
                                 {% else %}
