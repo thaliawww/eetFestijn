@@ -16,7 +16,7 @@ def update_lists(request):
     url = ('https://api.wiebetaaltwat.nl/api/lists/{list_id}/members'
            .format(list_id=settings.WBW_LIST_ID))
     response = session.get(url,
-                           headers={'Accept-Version': '3'},
+                           headers={'Accept-Version': '6'},
                            cookies=response.cookies)
     data = response.json()
     Participant.objects.all().delete()
@@ -40,5 +40,5 @@ def _create_wbw_session():
     }
     response = session.post('https://api.wiebetaaltwat.nl/api/users/sign_in',
                             json=payload,
-                            headers={'Accept-Version': '3'})
+                            headers={'Accept-Version': '6'})
     return session, response

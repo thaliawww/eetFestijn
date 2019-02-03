@@ -175,7 +175,7 @@ def overview(request):
                            .format(settings.WBW_LIST_ID))
                     response = session.post(url,
                                             json=payload,
-                                            headers={'Accept-Version': '3'},
+                                            headers={'Accept-Version': '6'},
                                             cookies=response.cookies)
                     order.save()
             except:  # noqa
