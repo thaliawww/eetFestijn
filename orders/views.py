@@ -98,7 +98,7 @@ def receipts(request):
         receipt.dict = json.loads(receipt.contents)
         if receipt.dict['orders'] and 'date' in receipt.dict['orders'][0]:
             for order in receipt.dict['orders']:
-                    order['date'] = dateutil.parser.parse(order['date'])
+                order['date'] = dateutil.parser.parse(order['date'])
             receipt.latest = min(x['date'] for x in receipt.dict['orders'])
     return render(request, 'orders/receipts.html', {'receipts': receipts})
 
