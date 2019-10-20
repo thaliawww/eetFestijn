@@ -9,4 +9,4 @@ register = template.Library()
 
 @register.filter
 def euro(cents):
-    return "€ " + locale.format('%.2f', cents/100)
+    return "€ " + locale.format_string('%.2f', cents/100)
