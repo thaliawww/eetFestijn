@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseServerError
+from django.shortcuts import redirect
 
 from .models import Participant
 from orders.models import Order
@@ -28,6 +29,9 @@ def update_lists(request):
         participant, _ = Participant.objects.get_or_create(wbw_id=uid)
         participant.name = name
         participant.save()
+
+    if request.GET.get('next', '') == 'meals':
+        return redirect('meals:index')
     return HttpResponse("Participants updated!")
 
 

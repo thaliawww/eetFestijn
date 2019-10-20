@@ -39,7 +39,7 @@
                             </button>
                         {% endif %}
                         If you want you can make a
-                        <a class="btn btn-default btn-xs" role="button" href="{% url 'summary' %}">
+                        <a class="btn btn-default btn-xs" role="button" href="{% url 'orders:summary' %}">
                             {% bootstrap_icon 'print' %}
                             printable overview
                         </a>.
@@ -113,7 +113,7 @@
         </div>
         <div class="row">
            <div class="col-sm-4 col-sm-offset-4">
-               <a href="{% url 'index' %}" role="button" class="btn btn-default btn-block"><span class="glyphicon glyphicon-chevron-left"></span>Back to the order page</a>
+               <a href="{% url 'orders:index' %}" role="button" class="btn btn-default btn-block"><span class="glyphicon glyphicon-chevron-left"></span>Back to the order page</a>
             </div>
         </div>
     </div>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Choose eetvoudig or eetFestijn</title>
+    {% load bootstrap3 %}
+    {% bootstrap_css %}
+    {% load static %}
+    {% load git_head %}
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div id="content">
+                <h2>eetvoudig</h2>
+                <p>
+                    Easy to use if you want to split the costs of a meal
+                    and process those costs on Wiebetaalwat.nl.
+                </p>
+                <a href="{% url 'meals:index' %}"
+                   class="btn-block btn btn-info">
+                    eetvoudig
+                </a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="content">
+                <h2>eetFestijn</h2>
+                <p class="h-10">
+                    Easy to use if you want to go to the Fest to get food and
+                    process those
+                    costs on Wiebetaalwat.nl.
+                </p>
+                <a href="{% url 'orders:index' %}"
+                   class="btn-block btn btn-warning">
+                    eetFestijn
+                </a>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <hr/>
+            <p class="text-center"><a
+                    href='https://github.com/thaliawww/eetfestijn/'>eetFestijn / eetvoudig
+                ({% git_head %})</a></p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

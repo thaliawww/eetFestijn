@@ -77,14 +77,11 @@
                         </table>
                     </div>
                     <button type='submit' class='btn btn-primary' id='submitbtn'>Order</button>
-                    <a class='btn btn-default' href="{% url 'summary' %}" data-toggle="tooltip" data-placement="top" title="Printable summary">{% bootstrap_icon "print" %}</a>
-                    <a class='btn btn-default' href="{% url 'summary_PDF' %}" data-toggle="tooltip" data-placement="top" title="PDF summary">{% bootstrap_icon "save" %}</a>
-                    <a class='btn btn-default' href="{% url 'overview' %}" data-toggle="tooltip" data-placement="top" title="Advanced overview">{% bootstrap_icon "list" %}</a>
-                    <a class='btn btn-default' href="{% url 'receipts' %}" data-toggle="tooltip" data-placement="top" title="Receipts">{% bootstrap_icon "tags" %}</a>
+                    <a class='btn btn-default' href="{% url 'orders:summary' %}" data-toggle="tooltip" data-placement="top" title="Printable summary">{% bootstrap_icon "print" %}</a>
+                    <a class='btn btn-default' href="{% url 'orders:summary_PDF' %}" data-toggle="tooltip" data-placement="top" title="PDF summary">{% bootstrap_icon "save" %}</a>
+                    <a class='btn btn-default' href="{% url 'orders:overview' %}" data-toggle="tooltip" data-placement="top" title="Advanced overview">{% bootstrap_icon "list" %}</a>
+                    <a class='btn btn-default' href="{% url 'orders:receipts' %}" data-toggle="tooltip" data-placement="top" title="Receipts">{% bootstrap_icon "tags" %}</a>
                 </form>
-            </div>
-            <div class="col-sm-4 footer">
-                <p><a href='https://github.com/thaliawww/eetfestijn/'>eetFestijn ({% git_head %})</a></p>
             </div>
             <div class="col-sm-8 col-sm-offset-4 main">
                 <h2>Menu</h2>

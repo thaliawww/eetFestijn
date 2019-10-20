@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>eetvoudig</title>
+    {% load bootstrap3 %}
+    {% bootstrap_css %}
+    {% load staticfiles %}
+    {% load git_head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'meals/style.css' %}?v={% git_head %}" />
+</head>
+<body>
+    <div class='container'>
+        <div class='row'>
+            <div class='col-md-6 col-md-offset-3'>
+                <div id='content'>
+                    <h2>eetvoudig</h2>
+                    <p>
+                        Easy to use if you want to equally (<em><sup>p</sup> &frasl; <sub>n</sub></em>) split the costs of a meal of <em>p</em> euros with <em>n</em> people and process those costs on Wiebetaalwat.nl.
+                    </p>
+                    <hr/>
+                    {% bootstrap_messages %}
+                    {% if not meal %}
+                    <p>
+                        There is currently no active meal. Do you want to start a new meal? Select one of the Wiebetaaltwat-lists that eetvoudig is allowed to access.
+                    </p>
+                    <p>
+                        <form method='post' id='startform' class="form-inline">
+                            {% csrf_token %}
+                            <button type='submit' class='btn btn-primary' name='startmeal'>Start new meal</button>
+                        </form>
+                    </p>
+                    <p>
+                        Press this button to update the list information:
+                        <a class='btn btn-default btn-xs' href="{% url 'update_list' %}?next=meals" data-toggle="tooltip" data-placement="top" title="Update Wiebetaaltwat-losts">{% bootstrap_icon "refresh" %}</a>.
+                    </p>
+                    {% else %}
+                    <p>
+                        There is an active meal. Do you want to participate? Tell us who you are or who is paying for you below.
+                    </p>
+                    <p>
+                        <div class='text-center'>
+                            <ul class="nav nav-pills" style='display:inline-block'>
+                                <li class="active"><a data-toggle="pill" href="#participate">I'm paying</a></li>
+                                <li><a data-toggle="pill" href="#standby">Someone else is paying</a></li>
+                            </ul>
+                        </div>
+                        <div class="tab-content">
+                            <div id="participate" class="tab-pane active">
+                                <form method='post'>
+                                    {% csrf_token %}
+                                    {% bootstrap_form participant_form %}
+                                    <div class='form-group text-center' style='margin-top:10px;'>
+                                        <button type='submit' class='btn btn-primary' name='participate'>Participate</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div id="standby" class="tab-pane">
+                                {% if warning_externals %}
+                                    <div class="alert alert-warning">
+                                        <strong>Caution!</strong>
+                                        As non-Technicie member you're always welcome to join dinner. However, we are not takeaway.com.
+                                        The rule thus is: <br /><br />
+                                        <strong>eating = biking</strong>
+
+                                        <br /><br />
+                                        If you're the one paying for the non-member, please make sure that they are following the rules.
+                                    </div>
+                                {% endif %}
+                            <form method='post'>
+                                {% csrf_token %}
+                                {% bootstrap_form participant_form %}
+                                {% bootstrap_form bystander_form %}
+                                    <div class='form-group text-center' style='margin-top:10px;'>
+                                        <button type='submit' class='btn btn-primary' name='bystand'>Participate</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </p>
+                    <hr />
+                    <p>
+                        This meal was last edited at <strong>{{ meal.date }}</strong>.
+                    </p>
+                    <p>
+                        <strong>Participants [{{ eaters | length }}]</strong>
+                    </p>
+                    <p>
+                        {% if not eaters %}
+                            <i>No participants yet.</i>
+                        {% else %}
+                        <form method='post'>
+                            {% csrf_token %}
+                            <ul class="list-unstyled">
+                            {% for eater in eaters %}
+                                <li>
+                                {% if eater.bystander %}
+                                    {{ eater.bystander.name }} (via {{ eater.participant.name }})
+                                    <button name='unbystand' value='{{ eater.bystander.pk }}' type='submit' class='btn btn-danger btn-xs'>{% bootstrap_icon 'remove' %}</button>
+                                {% else %}
+                                    {{ eater.participant.name }}
+                                    <button name='unparticipate' value='{{ eater.participant.pk }}' type='submit' class='btn btn-danger btn-xs'>{% bootstrap_icon 'remove' %}</button>
+                                {% endif %}
+                            {% endfor %}
+                            </ul>
+                        </form>
+                        {% endif %}
+                    </p>
+                    <p>
+                        <form method="post">
+                            {% csrf_token %}
+                            {% bootstrap_form form %}
+                            {% bootstrap_form_errors form type='non_fields' %}
+                            <div class="form-group text-center">
+                                <button type='submit' class='btn' name='abort' onclick='return confirm("Are you sure you want to cancel this meal? This action can not be undone.")'>Cancel</button>
+                                <button type='submit' class='btn btn-primary' name='update'>Save</button>
+                                <button type='submit' class='btn btn-success' name='finalise' onclick='return confirm("Are you sure you want to process this meal? This action can not be undone and actually enters data on Wiebetaaltwat.nl!")'>Save and process</button>
+                            </div>
+                        </form>
+                    </p>
+                    {% endif %}
+                </div>      
+            </div>
+        </div>
+    </div>
+    {% bootstrap_javascript jquery=1 %}
+    <script type="text/javascript" src="{% static 'meals/script.js' %}?v={% git_head %}"></script>
+</body>
+</html>
