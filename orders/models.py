@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.core.validators import validate_comma_separated_integer_list
+import re
 
 from wiebetaaltwat.models import Participant
 
@@ -32,6 +33,15 @@ class Item(models.Model):
             price = min(x.value for x in discounts if not x.relative)
             price = min(price, self.price)
         return price - sum(x.value for x in discounts if x.relative)
+
+    def order_value(self):
+        if not self.printable_name.strip()[0].isalpha():
+            return '_', self.real_price()
+
+        match = re.match(r'^([^()]+)(?:\(.+\))?$', self.printable_name)
+        if match:
+            return match.group(1).upper(), self.real_price()
+        return self.printable_name.upper(), self.real_price()
 
 
 class Order(models.Model):
