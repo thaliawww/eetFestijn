@@ -6,3 +6,4 @@ db.sqlite3
 htmlcov/
 venv/
 local_settings.py
+.idea/
